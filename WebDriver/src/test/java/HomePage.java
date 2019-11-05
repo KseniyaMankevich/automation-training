@@ -1,8 +1,10 @@
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class HomePage {
@@ -31,9 +33,6 @@ public class HomePage {
 
     @FindBy(xpath = "//*[@id=\"clientLogin\"]/div[1]/div[2]/div/div/div[2]/div/ul/li[4]/form/div[3]/input")
     private WebElement loginButton;
-
-    @FindBy(xpath = "//*[@id=\"client\"]/div[2]/div[1]/div/div/span")
-    private WebElement loginErrorMessage;
 
     @FindBy(xpath = "//*[@id=\"SuggestPickup\"]")
     private WebElement pickUpCityInput;
@@ -76,12 +75,6 @@ public class HomePage {
         return this;
     }
 
-
-    public void checkUser (String expectedMessage) {
-        Assert.assertTrue(loginErrorMessage.getText().equals(expectedMessage));
-    }
-
-
     public HomePage enterRentInfo (String pickUpCity,  String pickUpTime, String dropOffTime) {
         pickUpCityInput.sendKeys(pickUpCity);
         pickUpDateInput.click();
@@ -94,7 +87,16 @@ public class HomePage {
     }
 
 
-    public void checkDate (String expectedMessage) {
-        Assert.assertTrue(dateErrorMessage.getText().equals(expectedMessage));
+    public boolean isRentErrorMessageVisible(){
+        return dateErrorMessage.isDisplayed();
+    }
+
+
+    public boolean isLoginErrorMessageVisible(){
+            WebElement loginErrorMessgase =
+                    new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
+                            .until(ExpectedConditions
+                                    .presenceOfElementLocated(By.xpath("//*[@id=\"client\"]/div[2]/div[1]/div/div/span")));
+            return loginErrorMessgase.isDisplayed();
     }
 }

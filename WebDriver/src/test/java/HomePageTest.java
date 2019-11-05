@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.annotations.AfterClass;
@@ -27,8 +28,8 @@ public class HomePageTest  {
     @Test
     public void invalidRentDateTest() {
         homePage.openHomePage()
-                .enterRentInfo("Minsk, Belarus", "10:00 AM", "07:00 AM")
-                .checkDate("Your drop-off date cannot be before your pick-up date");
+                .enterRentInfo("Minsk, Belarus", "10:00 AM", "07:00 AM");
+                 Assert.assertTrue(homePage.isRentErrorMessageVisible());
     }
 
 
@@ -36,7 +37,7 @@ public class HomePageTest  {
     public void invalidUserNameInvalidPasswordTest() {
         homePage.openHomePage()
                 .openLoginPage()
-                .loginToWebSite("safenav363@dmail1.net", "1234")
-                .checkUser("Login error. Please try again.");
+                .loginToWebSite("safenav363@dmail1.net", "1234");
+                 Assert.assertTrue(homePage.isLoginErrorMessageVisible());
     }
 }
