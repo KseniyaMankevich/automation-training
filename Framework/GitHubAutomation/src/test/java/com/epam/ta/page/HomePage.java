@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.epam.ta.util.StringUtils.HOMEPAGE_URL;
 
-public class RentHomePage extends AbstractPage {
+public class HomePage extends AbstractPage {
 
     @FindBy(xpath = "//*[@id=\"SuggestPickup\"]")
     private WebElement pickUpLocationInput;
@@ -56,12 +56,12 @@ public class RentHomePage extends AbstractPage {
     private WebElement equalPickUpAndDropOffTimeErrorMessage;
 
 
-    public RentHomePage(WebDriver driver){
+    public HomePage(WebDriver driver){
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public RentHomePage openPage() {
+    public HomePage openPage() {
         driver.navigate().to(HOMEPAGE_URL);
         return this;
     }
@@ -81,10 +81,10 @@ public class RentHomePage extends AbstractPage {
         return new LocationErrorPage(driver);
     }
 
-    public UnavailablePickUpLocationPage inputUnavailablePickUpLocation(CarRentOptions rentTerms){
+    public UnavailablePickUpLocationeErrorPage inputUnavailablePickUpLocation(CarRentOptions rentTerms){
         definePickUpLocationForCarSearch(rentTerms);
         searchButton.click();
-        return new UnavailablePickUpLocationPage(driver);
+        return new UnavailablePickUpLocationeErrorPage(driver);
     }
 
     public ClosedStoresErrorPage searchCarInClosedHours(CarRentOptions rentTerms){
