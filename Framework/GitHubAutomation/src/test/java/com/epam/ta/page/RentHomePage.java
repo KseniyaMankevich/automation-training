@@ -1,8 +1,6 @@
 package com.epam.ta.page;
 
 import com.epam.ta.model.CarRentOptions;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,11 +9,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-
 import static com.epam.ta.util.StringUtils.HOMEPAGE_URL;
 
-public class HomePage extends AbstractPage {
-    private final Logger LOGGER = LogManager.getRootLogger();
+public class RentHomePage extends AbstractPage {
 
     @FindBy(xpath = "//*[@id=\"SuggestPickup\"]")
     private WebElement pickUpLocationInput;
@@ -44,16 +40,10 @@ public class HomePage extends AbstractPage {
     @FindBy(xpath = "//*[@id=\"wrapper-vue-container\"]/button")
     private WebElement selectCarButton;
 
-    @FindBy(xpath = "//*[@id=\"clientMyBookings\"]/div")
-    private WebElement bookingButton;
-
-    @FindBy(xpath = "//*[@id=\"dropLocation\"]")
-    private WebElement droppOffLocationCheck;
-
     @FindBy(className = "available")
     private WebElement dateChoice;
 
-    private final String XPATH_FOR_EMPTY_FORM_ERROR_MESSAGE = "//*[@id=\"formPesquisa\"]/div[2]/div";
+    private final String XPATH_FOR_EMPTY_FORM_ERROR_MESSAGE = "//*[@id=\"formPesquisa\"]";
     private WebElement emptySearchFormErrorMessage;
 
     private final String XPATH_FOR_DROPOFFTIME_BEFORE_PICKUPTIME_ERROR_MESSAGE = "//*[@id=\"DataDevolucao-error\"]";
@@ -66,12 +56,12 @@ public class HomePage extends AbstractPage {
     private WebElement equalPickUpAndDropOffTimeErrorMessage;
 
 
-    public HomePage(WebDriver driver){
+    public RentHomePage(WebDriver driver){
         super(driver);
         PageFactory.initElements(driver, this);
     }
 
-    public HomePage openPage() {
+    public RentHomePage openPage() {
         driver.navigate().to(HOMEPAGE_URL);
         return this;
     }
@@ -82,23 +72,26 @@ public class HomePage extends AbstractPage {
     }
 
     public BookingPage redirectToBookingPage(){
-        bookingButton.click();
+        logInSignUpButton.click();
         return new BookingPage(driver);
     }
 
     public LocationErrorPage inputLocationInformation(CarRentOptions rentTerms){
         defineTermsForCarLocationSearch(rentTerms);
-        LOGGER.info("Fill 'Pick-up location' field with " + rentTerms.getPickUpLocation()+", fill 'Drop-off location' field with " + rentTerms.getDropOffLocation());
-        searchButton.click();
         return new LocationErrorPage(driver);
     }
 
-    public UnavailablePickUpLocationErrorPage inputUnavailablePickUpLocation(CarRentOptions rentTerms){
+    public UnavailablePickUpLocationPage inputUnavailablePickUpLocation(CarRentOptions rentTerms){
         definePickUpLocationForCarSearch(rentTerms);
         searchButton.click();
-        return new UnavailablePickUpLocationErrorPage(driver);
+        return new UnavailablePickUpLocationPage(driver);
     }
 
+    public ClosedStoresErrorPage searchCarInClosedHours(CarRentOptions rentTerms){
+        defineTermsForCarSearchInClosedHours(rentTerms);
+        searchButton.click();
+        return new ClosedStoresErrorPage(driver);
+    }
 
     public PaymentPage selectCar(CarRentOptions rentTerms){
         defineTermsForCarSearch(rentTerms);
@@ -109,24 +102,22 @@ public class HomePage extends AbstractPage {
 
     public void definePickUpLocationForCarSearch(CarRentOptions rentTerms){
         pickUpLocationInput.sendKeys(rentTerms.getPickUpLocation());
-        LOGGER.info("Fill 'Pick-up location' field with " + rentTerms.getPickUpLocation());
     }
 
     public void defineTermsForCarLocationSearch(CarRentOptions rentTerms){
-        droppOffLocationCheck.click();
-        dropOffLocationInput.sendKeys(rentTerms.getDropOffLocation());
         pickUpLocationInput.sendKeys(rentTerms.getPickUpLocation());
+        dropOffLocationInput.sendKeys(rentTerms.getDropOffLocation());
     }
 
     public String leaveSearchFormEmpty(CarRentOptions rentTerms){
         searchButton.click();
-        LOGGER.info("Search form was left empty");
         emptySearchFormErrorMessage = new WebDriverWait(driver, WAIT_TIMEOUT_SECONDS)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath(XPATH_FOR_EMPTY_FORM_ERROR_MESSAGE)));
         return emptySearchFormErrorMessage.getText();
     }
 
     public String checkEqualPickUpAndDropOffTime(CarRentOptions rentTerms){
+        pickUpLocationInput.sendKeys(rentTerms.getPickUpLocation());
         pickUpDateInput.click();
         dateChoice.click();
         pickUpTimeInput.sendKeys(rentTerms.getPickUpTime());
@@ -139,6 +130,7 @@ public class HomePage extends AbstractPage {
     }
 
     public String checkPickUpAndDropOffTime(CarRentOptions rentTerms){
+        pickUpLocationInput.sendKeys(rentTerms.getPickUpLocation());
         pickUpDateInput.click();
         dateChoice.click();
         pickUpTimeInput.sendKeys(rentTerms.getPickUpTime());
@@ -151,6 +143,7 @@ public class HomePage extends AbstractPage {
     }
 
     public String checkPickUpTime(CarRentOptions rentTerms){
+        pickUpLocationInput.sendKeys(rentTerms.getPickUpLocation());
         pickUpDateInput.click();
         dateChoice.click();
         pickUpTimeInput.sendKeys(rentTerms.getPickUpTime());
@@ -169,16 +162,12 @@ public class HomePage extends AbstractPage {
         dropOffTimeInput.sendKeys(rentTerms.getDropOffTime());
     }
 
-    public ClosedStoresErrorPage searchCarInClosedHours(CarRentOptions rentTerms){
+    public void defineTermsForCarSearchInClosedHours(CarRentOptions rentTerms){
         pickUpLocationInput.sendKeys(rentTerms.getPickUpLocation());
         pickUpDateInput.click();
         dateChoice.click();
         pickUpTimeInput.sendKeys(rentTerms.getPickUpTime());
-        dropOffDateInput.click();
-        dateChoice.click();
+        dropOffDateInput.sendKeys(rentTerms.getDropOffDate());
         dropOffTimeInput.sendKeys(rentTerms.getDropOffTime());
-        LOGGER.info("Fill 'Pick-up time' field with " + rentTerms.getPickUpTime()+", fill 'Drop-off time' field with " + rentTerms.getDropOffTime());
-        searchButton.click();
-        return new ClosedStoresErrorPage(driver);
     }
 }

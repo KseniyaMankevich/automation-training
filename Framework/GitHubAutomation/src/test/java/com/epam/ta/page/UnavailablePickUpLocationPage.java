@@ -7,19 +7,19 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class UnavailablePickUpLocationeErrorPage extends AbstractPage {
+public class UnavailablePickUpLocationPage extends AbstractPage {
 
     private final String XPATH_FOR_ERROR_Message = "//*[@id=\"boxRetirada\"]/h3";
 
     private WebElement errorMessage;
 
-    public UnavailablePickUpLocationeErrorPage(WebDriver driver){
+    public UnavailablePickUpLocationPage(WebDriver driver){
         super(driver);
         PageFactory.initElements(this.driver, this);
     }
 
     @Override
-    public UnavailablePickUpLocationeErrorPage openPage(){
+    public UnavailablePickUpLocationPage openPage(){
         return this;
     }
 

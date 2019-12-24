@@ -1,20 +1,23 @@
 package com.epam.ta.page;
 
 import com.epam.ta.model.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 public class LoginPage extends AbstractPage {
+    private final Logger LOGGER = LogManager.getRootLogger();
 
-    @FindBy(name = "Email")
+    @FindBy(xpath = "//*[@id=\"clientLogin\"]/div[1]/div[2]/div/div/div[2]/div/ul/li[4]/form/div[1]/div/div/input")
     private WebElement usernameInput;
 
-    @FindBy(xpath = "Senha")
+    @FindBy(xpath = "//*[@id=\"clientLogin\"]/div[1]/div[2]/div/div/div[2]/div/ul/li[4]/form/div[2]/div/div/input")
     private WebElement passwordInput;
 
-    @FindBy(xpath = "//*[@id=\"clientLogin\"]")
+    @FindBy(xpath = "//*[@id=\"clientLogin\"]/div[1]/div[2]/div/div/div[2]/div/ul/li[4]/form/div[3]/input")
     private WebElement loginButton;
 
 
@@ -25,6 +28,7 @@ public class LoginPage extends AbstractPage {
 
     @Override
     public LoginPage openPage(){
+        LOGGER.info("Login page opened");
         return this;
     }
 

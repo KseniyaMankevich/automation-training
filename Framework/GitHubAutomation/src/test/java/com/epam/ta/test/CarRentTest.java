@@ -75,11 +75,11 @@ public class CarRentTest extends CommonConditions {
     @Test(description = "Test for checking possibility to change pick-up location on the payment page")
     public void changePickUpLocaionOnPaymentPageTest() {
         CarRentOptions testCarOptions = CarRentOptionsCreator.withChangingPickUpLocation();
-        String newPickUpLocationMessage = new HomePage(driver)
+        String message = new HomePage(driver)
                 .openPage()
-                .selectCar(testCarOptions)
-                .getNewPickUpLocation();
-        Assert.assertEquals(NEW_PICKUP_LOCATION_MESSAGE, newPickUpLocationMessage);
+                .inputLocationInformation(testCarOptions)
+                .getLocationErrorMessage();
+        Assert.assertEquals(PICKUP_AND_DROPOFF_LOCATION_ERROR_MESSAGE, message);
     }
 
 

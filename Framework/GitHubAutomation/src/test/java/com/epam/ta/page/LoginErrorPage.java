@@ -1,5 +1,7 @@
 package com.epam.ta.page;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,8 +10,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class LoginErrorPage extends AbstractPage {
+    private final Logger LOGGER = LogManager.getRootLogger();
 
-    private final String XPATH_FOR_LOGIN_ERROR = "//*[@id=\"loginError\"]";
+    private final String XPATH_FOR_LOGIN_ERROR = "//*[@id=\"client\"]/div[2]/div[1]/div/div/span";
 
     private WebElement loginErrorMessage;
 
@@ -20,6 +23,7 @@ public class LoginErrorPage extends AbstractPage {
 
     @Override
     public LoginErrorPage openPage(){
+        LOGGER.info("Login error page opened");
         return this;
     }
 
